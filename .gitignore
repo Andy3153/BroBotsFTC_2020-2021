@@ -1,0 +1,8 @@
+# Ignores backups/backups KDevelop creates automatically
+**/*bak
+
+# Ignores the files KDE's Dolphin file manager creates
+**.directory
+
+# Ignores Kate's swap temporary files
+**/*.kate-swp
