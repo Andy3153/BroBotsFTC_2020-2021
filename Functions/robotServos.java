@@ -9,9 +9,9 @@ import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMinPos;
 public class robotServos {
     public static float useClaw(Servo claw, double clawPos, Gamepad gamepad)
     {
-        if(gamepad.dpad_down)
+        if(gamepad.dpad_right)
             clawPos=clawPos>clawMaxPos-0.0225f?clawMaxPos:clawPos+0.0225f;
-        else if(gamepad.dpad_up)
+        else if(gamepad.dpad_left)
             clawPos=clawPos<clawMinPos+0.04f?clawMinPos:clawPos-0.4f;
         claw.setPosition(clawPos);
 

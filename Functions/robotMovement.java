@@ -11,10 +11,10 @@ public class robotMovement {
     }
 
     public static void driveStrafe(DcMotor FL, DcMotor FR, DcMotor BL, DcMotor BR, float speed) {
-        FL.setPower(speed);
-        FR.setPower(speed);
-        BL.setPower(-speed);
-        BR.setPower(-speed);
+        FL.setPower(-speed);
+        FR.setPower(-speed);
+        BL.setPower(speed);
+        BR.setPower(speed);
     }
 
     public static void driveTurn(DcMotor FL, DcMotor FR, DcMotor BL, DcMotor BR, float speed) {
