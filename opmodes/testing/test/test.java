@@ -49,16 +49,16 @@ public class test extends LinearOpMode
         while(opModeIsActive())
         {
             //region Set default power for motors
-            H1Motor0_FL.setPower(0);
-            H2Motor0_FR.setPower(0);
-            H1Motor1_BL.setPower(0);
-            H2Motor1_BR.setPower(0);
-
-            H1Motor2_Ramp0.setPower(0);
-            H1Motor3_Ramp1.setPower(0);
-
-            H2Motor2_Throw.setPower(0);
-            H2Motor3_Arm.setPower(0);
+//            H1Motor0_FL.setPower(0);
+//            H2Motor0_FR.setPower(0);
+//            H1Motor1_BL.setPower(0);
+//            H2Motor1_BR.setPower(0);
+//
+//            H1Motor2_Ramp0.setPower(0);
+//            H1Motor3_Ramp1.setPower(0);
+//
+//            H2Motor2_Throw.setPower(0);
+//            H2Motor3_Arm.setPower(0);
             //endregion
 
             //region Driving
@@ -84,14 +84,13 @@ public class test extends LinearOpMode
 
             //region Ring throwing
             if(gamepad2.right_stick_y != 0) {
-                if (gamepad2.right_stick_y > 0)
+                if(gamepad2.right_stick_y > 0)
                     throwSpeed = 1;
-                else if (gamepad2.right_stick_y < 0)
+                else if(gamepad2.right_stick_y < 0)
                     throwSpeed = -1;
-                else throwSpeed = 0;
 
                 throwRing(H2Motor2_Throw, throwSpeed);
-            }
+            } else throwSpeed = 0;
             //endregion
 
             //region Arm movement
