@@ -15,7 +15,7 @@ import static org.firstinspires.ftc.teamcode.Functions.robotMovement.throwRing;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.moveArm;
 import static org.firstinspires.ftc.teamcode.Functions.robotServos.useClaw;
 
-@TeleOp(name="M1RC34", group="TeleOp")
+//@TeleOp(name="M1RC34", group="TeleOp")
 public class M1RC34 extends LinearOpMode
 {
     @Override

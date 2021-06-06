@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.testing.test;
+package org.firstinspires.ftc.teamcode.opmodes.stable.toyota;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -19,10 +19,10 @@ import static org.firstinspires.ftc.teamcode.Functions.robotCheckSpeeds.checkThr
 import static org.firstinspires.ftc.teamcode.Functions.robotCheckSpeeds.checkCollectSpeed;
 import static org.firstinspires.ftc.teamcode.Functions.robotServos.useClaw;
 
-//import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMinPos;
+import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMinPos;
 
-@TeleOp(name="test", group="TeleOp")
-public class test extends LinearOpMode
+@TeleOp(name="toyota", group="TeleOp")
+public class toyota extends LinearOpMode
 {
     @Override
     public void runOpMode() // throws InterruptedException
@@ -31,7 +31,10 @@ public class test extends LinearOpMode
         int collectSpeed = 0,
             throwSpeed = 0,
             armSpeed = 0;
-        float clawPos = 0; //clawMinPos;
+        float clawPos = clawMinPos,
+              driveMoveSpeed,
+              driveStrafeSpeed,
+              driveTurnSpeed;
         //endregion
 
         //region Declaring motors
@@ -50,23 +53,27 @@ public class test extends LinearOpMode
         Servo H2Servo0_Claw = hardwareMap.get(Servo.class, "H2Servo0_Claw");
         //endregion
 
+        //region Setting Default Servo Positions
+        H2Servo0_Claw.setPosition(clawPos);
+        //endregion
+
         waitForStart();
 
         while(opModeIsActive())
         {
             //region Driving
-            if(gamepad1.left_stick_y != 0)
-                driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, gamepad1.left_stick_y);
+            if((driveMoveSpeed = gamepad1.left_stick_y) != 0)
+                driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, driveMoveSpeed);
             else
                 driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
 
-            if(gamepad1.left_stick_x != 0)
-                driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, gamepad1.left_stick_x);
+            if((driveStrafeSpeed = gamepad1.left_stick_x) != 0)
+                driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, driveStrafeSpeed);
             else
                 driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
 
-            if(gamepad1.right_stick_x != 0)
-                driveTurn(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, gamepad1.right_stick_x);
+            if((driveTurnSpeed = gamepad1.right_stick_x) != 0)
+                driveTurn(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, driveTurnSpeed);
             else
                 driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
             //endregion
@@ -96,11 +103,17 @@ public class test extends LinearOpMode
 
             //region Claw
             if(gamepad2.dpad_left || gamepad2.dpad_right)
-                useClaw(H2Servo0_Claw, clawPos, gamepad2);
+                H2Servo0_Claw.setPosition(useClaw(H2Servo0_Claw, clawPos, gamepad2));
             //endregion
 
             //region Telemetry
-            telemetry.addData("clawPos: ", clawPos);
+            telemetry.addData("driveMoveSpeed", driveMoveSpeed);
+            telemetry.addData("driveStrafeSpeed", driveStrafeSpeed);
+            telemetry.addData("driveTurnSpeed", driveTurnSpeed);
+            telemetry.addData("collectSpeed", collectSpeed);
+            telemetry.addData("throwSpeed", throwSpeed);
+            telemetry.addData("armSpeed", armSpeed);
+            telemetry.addData("clawPos", clawPos);
             telemetry.update();
             //endregion
         }
