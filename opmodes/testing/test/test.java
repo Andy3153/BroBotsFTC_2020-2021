@@ -5,21 +5,27 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+// Our code *communism*
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveMove;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveStrafe;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveTurn;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveZero;
+
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.collectRing;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.moveArm;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.throwRing;
+import static org.firstinspires.ftc.teamcode.Functions.robotCheckSpeeds.checkArmSpeed;
+import static org.firstinspires.ftc.teamcode.Functions.robotCheckSpeeds.checkThrowSpeed;
+import static org.firstinspires.ftc.teamcode.Functions.robotCheckSpeeds.checkCollectSpeed;
 import static org.firstinspires.ftc.teamcode.Functions.robotServos.useClaw;
 
-import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMinPos;
+//import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMinPos;
 
 @TeleOp(name="test", group="TeleOp")
 public class test extends LinearOpMode
 {
     @Override
-    public void runOpMode() throws InterruptedException
+    public void runOpMode() // throws InterruptedException
     {
         //region Declaring variables
         int collectSpeed = 0,
@@ -48,65 +54,48 @@ public class test extends LinearOpMode
 
         while(opModeIsActive())
         {
-            //region Set default power for motors
-//            H1Motor0_FL.setPower(0);
-//            H2Motor0_FR.setPower(0);
-//            H1Motor1_BL.setPower(0);
-//            H2Motor1_BR.setPower(0);
-//
-//            H1Motor2_Ramp0.setPower(0);
-//            H1Motor3_Ramp1.setPower(0);
-//
-//            H2Motor2_Throw.setPower(0);
-//            H2Motor3_Arm.setPower(0);
-            //endregion
-
             //region Driving
             if(gamepad1.left_stick_y != 0)
                 driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, gamepad1.left_stick_y);
+            else
+                driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
+
             if(gamepad1.left_stick_x != 0)
                 driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, gamepad1.left_stick_x);
+            else
+                driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
+
             if(gamepad1.right_stick_x != 0)
                 driveTurn(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, gamepad1.right_stick_x);
+            else
+                driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
             //endregion
 
             //region Ring collecting
-            if(gamepad2.left_stick_y != 0) {
-                if (gamepad2.left_stick_y > 0)
-                    collectSpeed = 1;
-                else if (gamepad2.left_stick_y < 0)
-                    collectSpeed = -1;
-                else collectSpeed = 0;
-
-                collectRing(H1Motor2_Ramp0, H1Motor3_Ramp1, collectSpeed);
+            if(gamepad2.left_stick_y != 0)
+                collectRing(H1Motor2_Ramp0, H1Motor3_Ramp1, checkCollectSpeed(gamepad2, collectSpeed));
+            else {
+                H1Motor2_Ramp0.setPower(0);
+                H1Motor3_Ramp1.setPower(0);
             }
             //endregion
 
             //region Ring throwing
-            if(gamepad2.right_stick_y != 0) {
-                if(gamepad2.right_stick_y > 0)
-                    throwSpeed = 1;
-                else if(gamepad2.right_stick_y < 0)
-                    throwSpeed = -1;
-
-                throwRing(H2Motor2_Throw, throwSpeed);
-            } else throwSpeed = 0;
+            if(gamepad2.right_stick_y != 0)
+                throwRing(H2Motor2_Throw, checkThrowSpeed(gamepad2, throwSpeed));
+            else
+                H2Motor2_Throw.setPower(0);
             //endregion
 
             //region Arm movement
-            if(gamepad2.dpad_up || gamepad2.dpad_down) {
-                if (gamepad2.dpad_up)
-                    armSpeed = 1;
-                else if (gamepad2.dpad_down)
-                    armSpeed = -1;
-                else armSpeed = 0;
-
-                moveArm(H2Motor3_Arm, armSpeed);
-            }
+            if(gamepad2.dpad_up || gamepad2.dpad_down)
+                moveArm(H2Motor3_Arm, checkArmSpeed(gamepad2, armSpeed));
+            else
+                H2Motor3_Arm.setPower(0);
             //endregion
 
             //region Claw
-            if(gamepad1.dpad_left || gamepad1.dpad_right)
+            if(gamepad2.dpad_left || gamepad2.dpad_right)
                 useClaw(H2Servo0_Claw, clawPos, gamepad2);
             //endregion
 

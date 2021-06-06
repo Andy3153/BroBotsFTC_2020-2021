@@ -24,6 +24,13 @@ public class robotMovement {
         BR.setPower(speed);
     }
 
+    public static void driveZero(DcMotor FL, DcMotor FR, DcMotor BL, DcMotor BR) {
+        FL.setPower(0);
+        FR.setPower(0);
+        BL.setPower(0);
+        BR.setPower(0);
+    }
+
     public static void collectRing(DcMotor R0, DcMotor R1, int speed) {
         R0.setPower(speed);
         R1.setPower(speed);
