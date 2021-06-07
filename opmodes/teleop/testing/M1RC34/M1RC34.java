@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.opmodes.testing.M1RC34;
+package org.firstinspires.ftc.teamcode.opmodes.teleop.testing.M1RC34;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -15,7 +16,8 @@ import static org.firstinspires.ftc.teamcode.Functions.robotMovement.throwRing;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.moveArm;
 import static org.firstinspires.ftc.teamcode.Functions.robotServos.useClaw;
 
-//@TeleOp(name="M1RC34", group="TeleOp")
+@TeleOp(name="M1RC34", group="TeleOp")
+@Disabled
 public class M1RC34 extends LinearOpMode
 {
     @Override

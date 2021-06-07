@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.stable.toyota;
+package org.firstinspires.ftc.teamcode.opmodes.teleop.stable.toyota;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
