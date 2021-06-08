@@ -79,31 +79,31 @@ public class toyota extends LinearOpMode
             //endregion
 
             //region Ring collecting
-            if(gamepad2.left_stick_y != 0)
-                collectRing(H1Motor2_Ramp0, H1Motor3_Ramp1, checkCollectSpeed(gamepad2, collectSpeed));
-            else {
-                H1Motor2_Ramp0.setPower(0);
-                H1Motor3_Ramp1.setPower(0);
-            }
+//            if(gamepad1.left_stick_y != 0)
+//                collectRing(H1Motor2_Ramp0, H1Motor3_Ramp1, checkCollectSpeed(gamepad1, collectSpeed));
+//            else {
+//                H1Motor2_Ramp0.setPower(0);
+//                H1Motor3_Ramp1.setPower(0);
+//            }
             //endregion
 
             //region Ring throwing
-            if(gamepad2.right_stick_y != 0)
-                throwRing(H2Motor2_Throw, checkThrowSpeed(gamepad2, throwSpeed));
-            else
-                H2Motor2_Throw.setPower(0);
+//            if(gamepad1.right_stick_y != 0)
+//                throwRing(H2Motor2_Throw, checkThrowSpeed(gamepad1, throwSpeed));
+//            else
+//                H2Motor2_Throw.setPower(0);
             //endregion
 
             //region Arm movement
-            if(gamepad2.dpad_up || gamepad2.dpad_down)
-                moveArm(H2Motor3_Arm, checkArmSpeed(gamepad2, armSpeed));
+            if(gamepad1.dpad_up || gamepad1.dpad_down)
+                moveArm(H2Motor3_Arm, checkArmSpeed(gamepad1, armSpeed));
             else
                 H2Motor3_Arm.setPower(0);
             //endregion
 
             //region Claw
-            if(gamepad2.dpad_left || gamepad2.dpad_right)
-                H2Servo0_Claw.setPosition(useClaw(H2Servo0_Claw, clawPos, gamepad2));
+            if(gamepad1.dpad_left || gamepad1.dpad_right)
+                H2Servo0_Claw.setPosition(useClaw(H2Servo0_Claw, clawPos, gamepad1));
             //endregion
 
             //region Telemetry
