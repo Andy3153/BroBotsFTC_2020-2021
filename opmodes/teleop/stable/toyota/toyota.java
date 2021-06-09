@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleop.stable.toyota;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 // Our code *communism*
@@ -46,7 +47,7 @@ public class toyota extends LinearOpMode
         DcMotor H1Motor2_Ramp0 = hardwareMap.get(DcMotor.class, "H1Motor2_Ramp0");
         DcMotor H1Motor3_Ramp1 = hardwareMap.get(DcMotor.class, "H1Motor3_Ramp1");
 
-        DcMotor H2Motor2_Throw = hardwareMap.get(DcMotor.class, "H2Motor2_Throw");
+        DcMotorEx H2Motor2_Throw = hardwareMap.get(DcMotorEx.class, "H2Motor2_Throw");
 
         DcMotor H2Motor3_Arm =hardwareMap.get(DcMotor.class, "H2Motor3_Arm");
 
@@ -79,31 +80,31 @@ public class toyota extends LinearOpMode
             //endregion
 
             //region Ring collecting
-//            if(gamepad1.left_stick_y != 0)
-//                collectRing(H1Motor2_Ramp0, H1Motor3_Ramp1, checkCollectSpeed(gamepad1, collectSpeed));
-//            else {
-//                H1Motor2_Ramp0.setPower(0);
-//                H1Motor3_Ramp1.setPower(0);
-//            }
+            if(gamepad2.left_stick_y != 0)
+                collectRing(H1Motor2_Ramp0, H1Motor3_Ramp1, checkCollectSpeed(gamepad2, collectSpeed));
+            else {
+                H1Motor2_Ramp0.setPower(0);
+                H1Motor3_Ramp1.setPower(0);
+            }
             //endregion
 
             //region Ring throwing
-//            if(gamepad1.right_stick_y != 0)
-//                throwRing(H2Motor2_Throw, checkThrowSpeed(gamepad1, throwSpeed));
-//            else
-//                H2Motor2_Throw.setPower(0);
+            if(gamepad2.right_stick_y != 0)
+                throwRing(H2Motor2_Throw, checkThrowSpeed(gamepad2, throwSpeed));
+            else
+                H2Motor2_Throw.setVelocity(600);
             //endregion
 
             //region Arm movement
-            if(gamepad1.dpad_up || gamepad1.dpad_down)
-                moveArm(H2Motor3_Arm, checkArmSpeed(gamepad1, armSpeed));
+            if(gamepad2.dpad_up || gamepad2.dpad_down)
+                moveArm(H2Motor3_Arm, checkArmSpeed(gamepad2, armSpeed));
             else
                 H2Motor3_Arm.setPower(0);
             //endregion
 
             //region Claw
-            if(gamepad1.dpad_left || gamepad1.dpad_right)
-                H2Servo0_Claw.setPosition(useClaw(H2Servo0_Claw, clawPos, gamepad1));
+            if(gamepad2.dpad_left || gamepad2.dpad_right)
+                H2Servo0_Claw.setPosition(useClaw(H2Servo0_Claw, clawPos, gamepad2));
             //endregion
 
             //region Telemetry
