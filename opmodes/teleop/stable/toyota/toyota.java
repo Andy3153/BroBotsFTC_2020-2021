@@ -14,7 +14,6 @@ import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveZero;
 
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.collectRing;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.moveArm;
-import static org.firstinspires.ftc.teamcode.Functions.robotMovement.throwRing;
 import static org.firstinspires.ftc.teamcode.Functions.robotCheckSpeeds.checkArmSpeed;
 import static org.firstinspires.ftc.teamcode.Functions.robotCheckSpeeds.checkThrowSpeed;
 import static org.firstinspires.ftc.teamcode.Functions.robotCheckSpeeds.checkCollectSpeed;
@@ -36,6 +35,8 @@ public class toyota extends LinearOpMode
               driveMoveSpeed,
               driveStrafeSpeed,
               driveTurnSpeed;
+        double servoRingPosInnit = 0.92,
+               servoRingPosPush = 0.68;
         //endregion
 
         //region Declaring motors
@@ -52,10 +53,12 @@ public class toyota extends LinearOpMode
         DcMotor H2Motor3_Arm =hardwareMap.get(DcMotor.class, "H2Motor3_Arm");
 
         Servo H2Servo0_Claw = hardwareMap.get(Servo.class, "H2Servo0_Claw");
+        Servo H2Servo1_Ring = hardwareMap.get(Servo.class, "H2Servo1_Ring");
         //endregion
 
         //region Setting Default Servo Positions
         H2Servo0_Claw.setPosition(clawPos);
+        H2Servo1_Ring.setPosition(servoRingPosInnit);
         //endregion
 
         waitForStart();
@@ -88,23 +91,28 @@ public class toyota extends LinearOpMode
             }
             //endregion
 
+            if(gamepad2.x)
+                H2Servo1_Ring.setPosition(servoRingPosInnit);
+            if(gamepad2.y)
+                H2Servo1_Ring.setPosition(servoRingPosPush);
+
             //region Ring throwing
             if(gamepad2.right_stick_y != 0)
-                throwRing(H2Motor2_Throw, checkThrowSpeed(gamepad2, throwSpeed));
+                H2Motor2_Throw.setPower(-0.65);
             else
-                H2Motor2_Throw.setVelocity(600);
+                H2Motor2_Throw.setPower(0);
             //endregion
 
             //region Arm movement
-            if(gamepad2.dpad_up || gamepad2.dpad_down)
-                moveArm(H2Motor3_Arm, checkArmSpeed(gamepad2, armSpeed));
+            if(gamepad1.dpad_up || gamepad1.dpad_down)
+                moveArm(H2Motor3_Arm, checkArmSpeed(gamepad1, armSpeed));
             else
                 H2Motor3_Arm.setPower(0);
             //endregion
 
             //region Claw
-            if(gamepad2.dpad_left || gamepad2.dpad_right)
-                H2Servo0_Claw.setPosition(useClaw(H2Servo0_Claw, clawPos, gamepad2));
+            if(gamepad1.dpad_left || gamepad1.dpad_right)
+                H2Servo0_Claw.setPosition(useClaw(H2Servo0_Claw, clawPos, gamepad1));
             //endregion
 
             //region Telemetry

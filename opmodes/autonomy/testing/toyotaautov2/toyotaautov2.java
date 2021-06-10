@@ -1,14 +1,27 @@
 package org.firstinspires.ftc.teamcode.opmodes.autonomy.testing.toyotaautov2;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+
+import static com.sun.tools.doclint.HtmlTag.BR;
+import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMaxPos;
+import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMinPos;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.autoDriveMove;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.autoDriveStrafe;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.autoDriveTurn;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.autoMoveArm;
+import static org.firstinspires.ftc.teamcode.Functions.robotServos.useClaw;
 
 /**
  * This 2020-2021 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -25,6 +38,7 @@ public class toyotaautov2 extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
     private static final String LABEL_SECOND_ELEMENT = "Single";
+
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
@@ -54,11 +68,54 @@ public class toyotaautov2 extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+
+        //region Declaring variables
+        int collectSpeed = 0,
+                throwSpeed = 0,
+                armSpeed = 0;
+        float clawPos = clawMinPos;
+        double servoRingPosInnit = 0.92,
+                servoRingPosPush = 0.68;
+        //endregion
+
+        //region Declaring motors
+        DcMotor H1Motor0_FL = hardwareMap.get(DcMotor.class, "H1Motor0_FL");
+        DcMotor H2Motor0_FR = hardwareMap.get(DcMotor.class, "H2Motor0_FR");
+        DcMotor H1Motor1_BL = hardwareMap.get(DcMotor.class, "H1Motor1_BL");
+        DcMotor H2Motor1_BR = hardwareMap.get(DcMotor.class, "H2Motor1_BR");
+
+        DcMotor H1Motor2_Ramp0 = hardwareMap.get(DcMotor.class, "H1Motor2_Ramp0");
+        DcMotor H1Motor3_Ramp1 = hardwareMap.get(DcMotor.class, "H1Motor3_Ramp1");
+
+        DcMotor H2Motor2_Throw = hardwareMap.get(DcMotor.class, "H2Motor2_Throw");
+
+        DcMotor H2Motor3_Arm =hardwareMap.get(DcMotor.class, "H2Motor3_Arm");
+
+        Servo H2Servo0_Claw = hardwareMap.get(Servo.class, "H2Servo0_Claw");
+        Servo H2Servo1_Ring = hardwareMap.get(Servo.class, "H2Servo1_Ring");
+
+        //endregion
+
+        //region sa ma bata tata de stiu ce pula mea e asta si de ce imi trebuie
+        H1Motor0_FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        H2Motor0_FR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        H1Motor1_BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        H2Motor1_BR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+//        H1Motor0_FL.setDirection(DcMotor.Direction.REVERSE);
+//        H1Motor1_BL.setDirection(DcMotor.Direction.REVERSE);
+        //endregion
+
+        //region Setting Default Servo Positions
+        H2Servo0_Claw.setPosition(clawMinPos);
+        //endregion
+
+
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that
         // first.
         initVuforia();
         initTfod();
-
         /**
          * Activate TensorFlow Object Detection before we wait for the start command.
          * Do it here so that the Camera Stream window will have the TensorFlow annotations visible.
@@ -78,6 +135,8 @@ public class toyotaautov2 extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
+
+        H2Servo1_Ring.setPosition(servoRingPosInnit);
         waitForStart();
 
         if (opModeIsActive()) {
@@ -91,15 +150,33 @@ public class toyotaautov2 extends LinearOpMode {
                         // step through the list of recognitions and display boundary info.
                         int i = 0;
                         for (Recognition recognition : updatedRecognitions) {
-                            if(recognition.getLabel() == "Single"){
+                            if(recognition.getLabel().equals("Single")){
                                 //Zona B, al doilea patrat, un rong
-                                telemetry.addData("Un brong", "Zona B");
+                                telemetry.addData("Un Brong-uri", "Zona B");
                                 telemetry.update();
+                                // 10 tick-uri = 70cm
+                                autoDriveMove(H1Motor0_FL,H2Motor0_FR,H1Motor1_BL, H2Motor1_BR, 0.1, 35);//245 cm
+                                autoMoveArm(H2Motor3_Arm, false, 0.2, 5);
+                                H2Servo0_Claw.setPosition(clawMinPos);
+                                autoMoveArm(H2Motor3_Arm, true, 0.2, 5);
+                                autoDriveMove(H1Motor0_FL,H2Motor0_FR,H1Motor1_BL, H2Motor1_BR, 0.2, -35);
+                                autoMoveArm(H2Motor3_Arm, false, 0.2, 5);
+                                autoDriveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 1);// 7 cm
+                                H2Servo0_Claw.setPosition(clawMaxPos);
+                                autoDriveMove(H1Motor0_FL,H2Motor0_FR,H1Motor1_BL, H2Motor1_BR, 0.2, 20);
+                                H2Servo1_Ring.setPosition(servoRingPosPush);
+                                H2Servo1_Ring.setPosition(servoRingPosInnit);
+                                autoDriveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 5);//35 cm
+                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2,  10);//70 cm
+                                H2Servo0_Claw.setPosition(clawMinPos);
+                                sleep(100000);
+
                             }
-                            else{
+                            else if(recognition.getLabel().equals("Quad")){
                                 //Zona C, al treilea paterat, patru ronguri
                                 telemetry.addData("Patru Brong-uri", "Zona C");
                                 telemetry.update();
+                                sleep(10000);
                             }
                         }
                         telemetry.update();
@@ -108,6 +185,7 @@ public class toyotaautov2 extends LinearOpMode {
                         //Zona A, primul patrat 0 ringuri==
                         telemetry.addData("Zero Bronguri", "Zona A");
                         telemetry.update();
+                        sleep(10000);
                     }
                 }
             }
@@ -143,7 +221,7 @@ public class toyotaautov2 extends LinearOpMode {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.8f;
+        tfodParameters.minResultConfidence = 0.5f;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }

@@ -12,7 +12,6 @@ import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveMove;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveStrafe;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveTurn;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.collectRing;
-import static org.firstinspires.ftc.teamcode.Functions.robotMovement.throwRing;
 import static org.firstinspires.ftc.teamcode.Functions.robotMovement.moveArm;
 import static org.firstinspires.ftc.teamcode.Functions.robotServos.useClaw;
 
@@ -116,7 +115,6 @@ public class M1RC34 extends LinearOpMode
                 throwSpeed = -1;
             else throwSpeed = 0;
 
-            throwRing(H2Motor2_Throw, throwSpeed);
             //endregion
 
             //region Arm System

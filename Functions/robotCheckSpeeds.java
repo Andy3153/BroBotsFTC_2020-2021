@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.Functions;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-public class robotCheckSpeeds {
+public class    robotCheckSpeeds {
     public static int checkCollectSpeed(Gamepad gamepad, int speed){
         if (gamepad.left_stick_y > 0)
             speed = 1;
