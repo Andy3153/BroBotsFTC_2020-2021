@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.autonomy.testing.toyotaautov2;
+gitpackage org.firstinspires.ftc.teamcode.opmodes.autonomy.testing.toyotaautov2;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -89,7 +89,7 @@ public class toyotaautov2 extends LinearOpMode {
 
         DcMotor H2Motor2_Throw = hardwareMap.get(DcMotor.class, "H2Motor2_Throw");
 
-        DcMotor H2Motor3_Arm =hardwareMap.get(DcMotor.class, "H2Motor3_Arm");
+        DcMotor H2Motor3_Arm = hardwareMap.get(DcMotor.class, "H2Motor3_Arm");
 
         Servo H2Servo0_Claw = hardwareMap.get(Servo.class, "H2Servo0_Claw");
         Servo H2Servo1_Ring = hardwareMap.get(Servo.class, "H2Servo1_Ring");
@@ -129,7 +129,7 @@ public class toyotaautov2 extends LinearOpMode {
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(3.0, 16.0/9.0);
+            tfod.setZoom(3.5, 16.0 / 9.0);
         }
 
         /** Wait for the game to begin */
@@ -150,38 +150,36 @@ public class toyotaautov2 extends LinearOpMode {
                         // step through the list of recognitions and display boundary info.
                         int i = 0;
                         for (Recognition recognition : updatedRecognitions) {
-                            if(recognition.getLabel().equals("Single")){
+                            if (recognition.getLabel().equals("Single")) {
                                 //Zona B, al doilea patrat, un rong
                                 telemetry.addData("Un Brong-uri", "Zona B");
                                 telemetry.update();
                                 // 10 tick-uri = 70cm
-                                autoDriveMove(H1Motor0_FL,H2Motor0_FR,H1Motor1_BL, H2Motor1_BR, 0.1, 35);//245 cm
+                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.1, 35);//245 cm
                                 autoMoveArm(H2Motor3_Arm, false, 0.2, 5);
                                 H2Servo0_Claw.setPosition(clawMinPos);
                                 autoMoveArm(H2Motor3_Arm, true, 0.2, 5);
-                                autoDriveMove(H1Motor0_FL,H2Motor0_FR,H1Motor1_BL, H2Motor1_BR, 0.2, -35);
+                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, -35);
                                 autoMoveArm(H2Motor3_Arm, false, 0.2, 5);
                                 autoDriveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 1);// 7 cm
                                 H2Servo0_Claw.setPosition(clawMaxPos);
-                                autoDriveMove(H1Motor0_FL,H2Motor0_FR,H1Motor1_BL, H2Motor1_BR, 0.2, 20);
+                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 20);
                                 H2Servo1_Ring.setPosition(servoRingPosPush);
                                 H2Servo1_Ring.setPosition(servoRingPosInnit);
                                 autoDriveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 5);//35 cm
-                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2,  10);//70 cm
+                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 10);//70 cm
                                 H2Servo0_Claw.setPosition(clawMinPos);
-                                sleep(100000);
+//                                sleep(100000);
 
-                            }
-                            else if(recognition.getLabel().equals("Quad")){
+                            } else if (recognition.getLabel().equals("Quad")) {
                                 //Zona C, al treilea paterat, patru ronguri
                                 telemetry.addData("Patru Brong-uri", "Zona C");
                                 telemetry.update();
-                                sleep(10000);
+//                                sleep(10000);
                             }
                         }
                         telemetry.update();
-                    }
-                    else{
+                    } else {
                         //Zona A, primul patrat 0 ringuri==
                         telemetry.addData("Zero Bronguri", "Zona A");
                         telemetry.update();
@@ -189,17 +187,17 @@ public class toyotaautov2 extends LinearOpMode {
                     }
                 }
             }
-        }
 
-        if (tfod != null) {
-            tfod.shutdown();
+            if (tfod != null) {
+                tfod.shutdown();
+            }
         }
     }
 
     /**
      * Initialize the Vuforia localization engine.
      */
-    private void initVuforia() {
+    private void initVuforia(){
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
