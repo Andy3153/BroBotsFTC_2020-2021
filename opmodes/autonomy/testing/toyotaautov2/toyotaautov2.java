@@ -1,4 +1,4 @@
-gitpackage org.firstinspires.ftc.teamcode.opmodes.autonomy.testing.toyotaautov2;
+package org.firstinspires.ftc.teamcode.opmodes.autonomy.testing.toyotaautov2;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -17,10 +17,10 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import static com.sun.tools.doclint.HtmlTag.BR;
 import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMaxPos;
 import static org.firstinspires.ftc.teamcode.Functions.Constants.clawMinPos;
-import static org.firstinspires.ftc.teamcode.Functions.robotMovement.autoDriveMove;
-import static org.firstinspires.ftc.teamcode.Functions.robotMovement.autoDriveStrafe;
-import static org.firstinspires.ftc.teamcode.Functions.robotMovement.autoDriveTurn;
-import static org.firstinspires.ftc.teamcode.Functions.robotMovement.autoMoveArm;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveMove;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveStrafe;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.driveTurn;
+import static org.firstinspires.ftc.teamcode.Functions.robotMovement.moveArm;
 import static org.firstinspires.ftc.teamcode.Functions.robotServos.useClaw;
 
 /**
@@ -73,6 +73,7 @@ public class toyotaautov2 extends LinearOpMode {
         int collectSpeed = 0,
                 throwSpeed = 0,
                 armSpeed = 0;
+        int stop = 0;
         float clawPos = clawMinPos;
         double servoRingPosInnit = 0.92,
                 servoRingPosPush = 0.68;
@@ -155,35 +156,82 @@ public class toyotaautov2 extends LinearOpMode {
                                 telemetry.addData("Un Brong-uri", "Zona B");
                                 telemetry.update();
                                 // 10 tick-uri = 70cm
-                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.1, 35);//245 cm
-                                autoMoveArm(H2Motor3_Arm, false, 0.2, 5);
-                                H2Servo0_Claw.setPosition(clawMinPos);
-                                autoMoveArm(H2Motor3_Arm, true, 0.2, 5);
-                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, -35);
-                                autoMoveArm(H2Motor3_Arm, false, 0.2, 5);
-                                autoDriveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 1);// 7 cm
+                                driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, -0.5f);
+                                sleep(800);
+                                driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, -0.2f);
+                                sleep(200);
+                                H1Motor0_FL.setPower(0);
+                                H1Motor1_BL.setPower(0);
+                                H2Motor0_FR.setPower(0);
+                                H2Motor1_BR.setPower(0);
+                                moveArm(H2Motor3_Arm, -0.7);
+                                sleep(1400);
+                                H2Motor3_Arm.setPower(0);
                                 H2Servo0_Claw.setPosition(clawMaxPos);
-                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 20);
-                                H2Servo1_Ring.setPosition(servoRingPosPush);
-                                H2Servo1_Ring.setPosition(servoRingPosInnit);
-                                autoDriveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 5);//35 cm
-                                autoDriveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2, 10);//70 cm
-                                H2Servo0_Claw.setPosition(clawMinPos);
-//                                sleep(100000);
-
+                                sleep(500);
+                                stop = 1;
+                                driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.5f);
+                                sleep(100);
+                                H1Motor0_FL.setPower(0);
+                                H1Motor1_BL.setPower(0);
+                                H2Motor0_FR.setPower(0);
+                                H2Motor1_BR.setPower(0);
+                                while(opModeIsActive());
                             } else if (recognition.getLabel().equals("Quad")) {
                                 //Zona C, al treilea paterat, patru ronguri
                                 telemetry.addData("Patru Brong-uri", "Zona C");
                                 telemetry.update();
-//                                sleep(10000);
+                                driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, -0.2f);
+                                sleep(200);
+                                driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, -0.5f);
+                                sleep(900);
+                                driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2f);
+                                sleep(400);
+                                H1Motor0_FL.setPower(0);
+                                H1Motor1_BL.setPower(0);
+                                H2Motor0_FR.setPower(0);
+                                H2Motor1_BR.setPower(0);
+                                moveArm(H2Motor3_Arm, -0.7);
+                                sleep(1400);
+                                H2Servo0_Claw.setPosition(clawMaxPos);
+                                H2Motor3_Arm.setPower(0);
+                                sleep(500);
+                                stop = 1;
+                                driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.5f);
+                                sleep(100);
+                                H1Motor0_FL.setPower(0);
+                                H1Motor1_BL.setPower(0);
+                                H2Motor0_FR.setPower(0);
+                                H2Motor1_BR.setPower(0);
+                                while(opModeIsActive());
                             }
                         }
                         telemetry.update();
-                    } else {
+                    } else if(stop != 1){
                         //Zona A, primul patrat 0 ringuri==
                         telemetry.addData("Zero Bronguri", "Zona A");
                         telemetry.update();
-                        sleep(10000);
+                        driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, -0.2f);
+                        sleep(200);
+                        driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, -0.5f);
+                        sleep(750);
+                        driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.2f);
+                        sleep(400);
+                        H1Motor0_FL.setPower(0);
+                        H1Motor1_BL.setPower(0);
+                        H2Motor0_FR.setPower(0);
+                        H2Motor1_BR.setPower(0);
+                        moveArm(H2Motor3_Arm, -0.7);
+                        sleep(1400);
+                        H2Motor3_Arm.setPower(0);
+                        H2Servo0_Claw.setPosition(clawMaxPos);
+//                        driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, 0.5f);
+                        sleep(100);
+                        H1Motor0_FL.setPower(0);
+                        H1Motor1_BL.setPower(0);
+                        H2Motor0_FR.setPower(0);
+                        H2Motor1_BR.setPower(0);
+                        while(opModeIsActive());
                     }
                 }
             }

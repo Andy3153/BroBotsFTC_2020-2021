@@ -25,9 +25,9 @@ public class    robotCheckSpeeds {
 
     public static double checkArmSpeed(Gamepad gamepad, double speed) {
         if (gamepad.dpad_up)
-            speed = -0.7;
-        else if (gamepad.dpad_down)
             speed = 0.7;
+        else if (gamepad.dpad_down)
+            speed = -0.7;
         else speed = 0;
 
         return speed;

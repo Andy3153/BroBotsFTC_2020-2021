@@ -10,9 +10,9 @@ public class robotServos {
     public static float useClaw(Servo claw, float clawPos, Gamepad gamepad)
     {
         if(gamepad.dpad_right)
-            clawPos = clawMaxPos;
-        else if(gamepad.dpad_left)
             clawPos = clawMinPos;
+        else if(gamepad.dpad_left)
+            clawPos = clawMaxPos;
         claw.setPosition(clawPos);
 
         return clawPos;

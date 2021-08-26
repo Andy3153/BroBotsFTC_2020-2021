@@ -41,24 +41,12 @@ public class toyota extends LinearOpMode
 
         //region Declaring motors
         DcMotor H1Motor0_FL = hardwareMap.get(DcMotor.class, "H1Motor0_FL");
-        DcMotor H2Motor0_FR = hardwareMap.get(DcMotor.class, "H2Motor0_FR");
+        DcMotor H1Motor0_FR = hardwareMap.get(DcMotor.class, "H1Motor0_FR");
         DcMotor H1Motor1_BL = hardwareMap.get(DcMotor.class, "H1Motor1_BL");
-        DcMotor H2Motor1_BR = hardwareMap.get(DcMotor.class, "H2Motor1_BR");
-
-        DcMotor H1Motor2_Ramp0 = hardwareMap.get(DcMotor.class, "H1Motor2_Ramp0");
-        DcMotor H1Motor3_Ramp1 = hardwareMap.get(DcMotor.class, "H1Motor3_Ramp1");
-
-        DcMotorEx H2Motor2_Throw = hardwareMap.get(DcMotorEx.class, "H2Motor2_Throw");
-
-        DcMotor H2Motor3_Arm =hardwareMap.get(DcMotor.class, "H2Motor3_Arm");
-
-        Servo H2Servo0_Claw = hardwareMap.get(Servo.class, "H2Servo0_Claw");
-        Servo H2Servo1_Ring = hardwareMap.get(Servo.class, "H2Servo1_Ring");
+        DcMotor H1Motor1_BR = hardwareMap.get(DcMotor.class, "H1Motor1_BR");
         //endregion
 
-        //region Setting Default Servo Positions
-        H2Servo0_Claw.setPosition(clawPos);
-        H2Servo1_Ring.setPosition(servoRingPosInnit);
+        //region Setting Default Servo Position
         //endregion
 
         waitForStart();
@@ -66,64 +54,34 @@ public class toyota extends LinearOpMode
         while(opModeIsActive())
         {
             //region Driving
-            if((driveMoveSpeed = gamepad1.left_stick_y) != 0)
-                driveMove(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, driveMoveSpeed);
-            else
-                driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
+            if(gamepad1.x){
+                H1Motor0_FL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            if((driveStrafeSpeed = gamepad1.left_stick_x) != 0)
-                driveStrafe(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, driveStrafeSpeed);
-            else
-                driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
+                H1Motor1_BL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            if((driveTurnSpeed = gamepad1.right_stick_x) != 0)
-                driveTurn(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR, driveTurnSpeed);
-            else
-                driveZero(H1Motor0_FL, H2Motor0_FR, H1Motor1_BL, H2Motor1_BR);
-            //endregion
 
-            //region Ring collecting
-            if(gamepad2.left_stick_y != 0)
-                collectRing(H1Motor2_Ramp0, H1Motor3_Ramp1, checkCollectSpeed(gamepad2, collectSpeed));
-            else {
-                H1Motor2_Ramp0.setPower(0);
-                H1Motor3_Ramp1.setPower(0);
+                H1Motor0_FL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+                H1Motor1_BL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
             }
-            //endregion
 
-            if(gamepad2.x)
-                H2Servo1_Ring.setPosition(servoRingPosInnit);
-            if(gamepad2.y)
-                H2Servo1_Ring.setPosition(servoRingPosPush);
+                telemetry.addData("Pozitite FL", H1Motor0_FL.getCurrentPosition());
+                telemetry.addData("Pozitite FR", H1Motor0_FR.getCurrentPosition());
+                telemetry.addData("Pozitite BL", H1Motor1_BL.getCurrentPosition());
+                telemetry.addData("Pozitite BR", H1Motor1_BR.getCurrentPosition());
+                telemetry.update();
 
-            //region Ring throwing
-            if(gamepad2.right_stick_y != 0)
-                H2Motor2_Throw.setPower(-0.65);
-            else
-                H2Motor2_Throw.setPower(0);
-            //endregion
-
-            //region Arm movement
-            if(gamepad1.dpad_up || gamepad1.dpad_down)
-                moveArm(H2Motor3_Arm, checkArmSpeed(gamepad1, armSpeed));
-            else
-                H2Motor3_Arm.setPower(0);
-            //endregion
-
-            //region Claw
-            if(gamepad1.dpad_left || gamepad1.dpad_right)
-                H2Servo0_Claw.setPosition(useClaw(H2Servo0_Claw, clawPos, gamepad1));
-            //endregion
 
             //region Telemetry
-            telemetry.addData("driveMoveSpeed", driveMoveSpeed);
-            telemetry.addData("driveStrafeSpeed", driveStrafeSpeed);
-            telemetry.addData("driveTurnSpeed", driveTurnSpeed);
-            telemetry.addData("collectSpeed", collectSpeed);
-            telemetry.addData("throwSpeed", throwSpeed);
-            telemetry.addData("armSpeed", armSpeed);
-            telemetry.addData("clawPos", clawPos);
-            telemetry.update();
+//            telemetry.addData("driveMoveSpeed", driveMoveSpeed);
+//            telemetry.addData("driveStrafeSpeed", driveStrafeSpeed);
+//            telemetry.addData("driveTurnSpeed", driveTurnSpeed);
+//            telemetry.addData("collectSpeed", collectSpeed);
+//            telemetry.addData("throwSpeed", throwSpeed);
+//            telemetry.addData("armSpeed", armSpeed);
+//            telemetry.addData("clawPos", clawPos);
+//            telemetry.update();
             //endregion
         }
     }
